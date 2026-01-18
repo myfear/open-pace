@@ -4,6 +4,8 @@ A federated fitness tracking platform built on ActivityPub, using Quarkus and Ve
 
 ## 🎯 The Vision
 
+![Open Pace Logo](open-pace.gif)
+
 **Open Pace** is a federated alternative to Strava that:
 - ✅ Lets you own your data (run your own instance or choose one you trust)
 - ✅ Works with the fediverse (Mastodon users can follow your activities)
