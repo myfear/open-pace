@@ -32,95 +32,378 @@ Each sprint has:
 
 ## Project Structure
 
-Since this is part of a mono-repo, each implementation sprint is a **standalone, runnable project** in its own folder:
+Each implementation sprint is a **standalone, runnable project** in its own folder within this repository:
 
 ```
-mono-repo-root/
-├── open-pace/                    # This folder (strategy & shared docs)
-│   ├── README.md                 # Main project overview
-│   ├── IMPLEMENTATION_STRATEGY.md      # This file
-│   └── docs/                     # Shared documentation
-│       ├── part-1-basic-activitypub.md
-│       ├── part-2-custom-activities.md
-│       ├── part-3-rich-interop.md
-│       ├── part-4-sports-features.md
-│       ├── part-5-privacy-data.md
-│       ├── ACTIVITYPUB_REFERENCE.md
-│       └── PROJECT_SETUP.md
+open-pace/                         # Repository root
+├── README.md                      # Main project overview
+├── IMPLEMENTATION_STRATEGY.md     # This file
+├── docs/                          # Shared documentation
+│   ├── part-1-basic-activitypub.md
+│   ├── part-2-custom-activities.md
+│   ├── part-3-rich-interop.md
+│   ├── part-4-sports-features.md
+│   ├── part-5-privacy-data.md
+│   ├── ACTIVITYPUB_REFERENCE.md
+│   └── PROJECT_SETUP.md
 │
-├── open-pace-p1/                 # Sprint 1: Standalone project
-│   ├── pom.xml                   # Quarkus project
-│   ├── README.md                 # Sprint 1 specific README
+├── open-pace-p1/                  # Sprint 1: Standalone project
+│   ├── pom.xml                    # Quarkus project
+│   ├── README.md                  # Sprint 1 specific README
 │   ├── src/
 │   │   └── main/
 │   │       └── java/org/openpace/
-│   │           └── core/         # Core ActivityPub logic
-│   ├── src/test/                 # Sprint 1 tests
+│   │           └── core/          # Core ActivityPub logic
+│   ├── src/test/                  # Sprint 1 tests
 │   └── (no docker-compose needed - Quarkus Dev Services handles it)
 │
-├── open-pace-p2/                 # Sprint 2: Standalone project
-│   ├── pom.xml                   # Quarkus project (builds on Sprint 1)
-│   ├── README.md                 # Sprint 2 specific README
+├── open-pace-p2/                  # Sprint 2: Standalone project
+│   ├── pom.xml                    # Quarkus project (builds on Sprint 1)
+│   ├── README.md                  # Sprint 2 specific README
 │   ├── src/
 │   │   └── main/
 │   │       └── java/org/openpace/
-│   │           ├── core/         # Core ActivityPub (refined)
-│   │           └── activities/   # Custom activity types
+│   │           ├── core/          # Core ActivityPub (refined)
+│   │           └── activities/  # Custom activity types
 │   └── ...
 │
-├── open-pace-p3/                 # Sprint 3: Standalone project
-├── open-pace-p4/                 # Sprint 4: Standalone project
-├── open-pace-p5/                 # Sprint 5: Standalone project
-├── open-pace-p6/                 # Sprint 6: Standalone project
-├── open-pace-p7/                 # Sprint 7: Standalone project
-├── open-pace-p8/                 # Sprint 8: Standalone project
-├── open-pace-p9/                 # Sprint 9: Standalone project
-└── open-pace-p10/                # Sprint 10: Standalone project
+├── open-pace-p3/                  # Sprint 3: Standalone project
+├── open-pace-p4/                  # Sprint 4: Standalone project
+├── open-pace-p5/                  # Sprint 5: Standalone project
+├── open-pace-p6/                  # Sprint 6: Standalone project
+├── open-pace-p7/                  # Sprint 7: Standalone project
+├── open-pace-p8/                  # Sprint 8: Standalone project
+├── open-pace-p9/                  # Sprint 9: Standalone project
+└── open-pace-p10/                 # Sprint 10: Standalone project
 ```
 
 **Key Benefits of This Structure:**
 - ✅ Each sprint is **completely runnable** independently
 - ✅ Developers can start at any sprint (with prerequisites)
-- ✅ No need to manage branches or tags for checkpoints
 - ✅ Clear separation of concerns
 - ✅ Easy to test each sprint in isolation
-- ✅ Works well in mono-repo structure
+- ✅ Version control via git tags for each sprint release
 
 ## Git Workflow Strategy
 
-### Mono-Repo Approach: Separate Project Folders
+### Branch Strategy
 
-Since each sprint is a **standalone project folder**, the git workflow is simplified:
+This repository follows a **Git Flow-inspired** branching model optimized for incremental sprint development:
 
-#### Structure
-- Each sprint lives in its own folder: `open-pace-p1/`, `open-pace-p2/`, etc.
-- All sprints are in the same mono-repo
-- Shared documentation stays in `open-pace/docs/`
+#### Main Branches
+
+- **`main`**: Production-ready code. Contains stable, tested sprints. Each sprint completion is tagged and merged here.
+- **`develop`**: Integration branch for active development. Feature branches merge here before going to `main`.
+
+#### Branch Structure
+
+```
+main                    (stable releases, tagged)
+  │
+  ├── v0.1.0-sprint1   (tag)
+  ├── v0.2.0-sprint2   (tag)
+  └── ...
+  │
+develop                 (integration branch)
+  │
+  ├── feature/sprint-3  (feature branch)
+  └── feature/sprint-4  (feature branch)
+```
 
 #### Development Workflow
-1. **Create new sprint folder**: `open-pace-pX/`
-2. **Initialize as Quarkus project**: Set up `pom.xml`, structure
-3. **Implement sprint features**: Each sprint is self-contained
-4. **Reference previous sprints**: Copy/adapt code from `open-pace-p(X-1)/` as needed
-5. **Commit to mono-repo**: All sprints committed together
 
-#### Advantages
-- ✅ **No branch management**: Each sprint is a folder, not a branch
-- ✅ **Easy navigation**: Clear folder structure
-- ✅ **Independent testing**: Each sprint can be tested separately
-- ✅ **Clear progression**: Readers can see evolution across folders
-- ✅ **Mono-repo friendly**: Fits naturally into existing structure
+1. **Start a new sprint**: Create feature branch from `develop`
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/sprint-X
+   ```
 
-#### Versioning (Optional)
-If you want to tag releases:
-- Tag the mono-repo: `open-pace-v1.0-sprint1`, `open-pace-v1.0-sprint2`
-- Each tag represents a complete state of all sprints up to that point
+2. **Implement sprint features**: Work in the feature branch
+   - Create sprint folder: `open-pace-pX/`
+   - Implement features
+   - Commit frequently with clear messages
 
-#### Migration from Previous Sprints
+3. **Merge to develop**: When sprint is complete and tested
+   ```bash
+   git checkout develop
+   git merge --no-ff feature/sprint-X
+   git push origin develop
+   ```
+
+4. **Release to main**: Tag and merge to `main` for stable release
+   ```bash
+   git checkout main
+   git merge --no-ff develop
+   git tag -a v0.X.0-sprintX -m "Release Sprint X: [Description]"
+   git push origin main
+   git push origin --tags
+   ```
+
+### Semantic Versioning
+
+We use **Semantic Versioning (SemVer)** with sprint-based increments:
+
+#### Version Format: `MAJOR.MINOR.PATCH-sprintN`
+
+- **MAJOR**: Breaking changes to API or architecture (rare, only for major redesigns)
+- **MINOR**: New features, new sprints (increments with each sprint)
+- **PATCH**: Bug fixes, patches to existing sprints
+- **Sprint identifier**: `-sprintN` suffix for clarity
+
+#### Version Progression Example
+
+```
+v0.1.0-sprint1   # Sprint 1: Basic ActivityPub
+v0.2.0-sprint2   # Sprint 2: Custom Activity Types
+v0.2.1-sprint2   # Patch: Bug fix in Sprint 2
+v0.3.0-sprint3   # Sprint 3: Rich Data & Interop
+v0.4.0-sprint4   # Sprint 4: Sports Features
+...
+v1.0.0-sprint10  # Sprint 10: Complete application (first stable release)
+```
+
+#### Versioning Rules
+
+- **New Sprint**: Increment MINOR, reset PATCH to 0
+- **Bug Fix**: Increment PATCH for the current sprint
+- **Breaking Change**: Increment MAJOR (only if API/architecture changes)
+- **Pre-release**: Use `-alpha`, `-beta`, `-rc` suffixes if needed (e.g., `v0.3.0-alpha-sprint3`)
+
+### Git Tags
+
+#### Tag Naming Convention
+
+- **Release tags**: `v0.X.0-sprintX` (e.g., `v0.1.0-sprint1`)
+- **Patch tags**: `v0.X.Y-sprintX` (e.g., `v0.2.1-sprint2`)
+- **Pre-release tags**: `v0.X.0-alpha-sprintX`, `v0.X.0-beta-sprintX`, `v0.X.0-rc-sprintX`
+
+#### Tagging Workflow
+
+1. **Create annotated tag** with descriptive message:
+   ```bash
+   git tag -a v0.1.0-sprint1 -m "Release Sprint 1: Basic ActivityPub Server
+   
+   Features:
+   - WebFinger discovery
+   - Actor profiles
+   - Inbox/Outbox
+   - Basic federation with Mastodon"
+   ```
+
+2. **Push tags** to remote:
+   ```bash
+   git push origin --tags
+   ```
+
+3. **Verify tags**:
+   ```bash
+   git tag -l "v0.*"
+   git show v0.1.0-sprint1
+   ```
+
+#### Tag Best Practices
+
+- ✅ Always use **annotated tags** (`-a` flag) for releases
+- ✅ Include **changelog summary** in tag message
+- ✅ Tag **only on `main` branch** after merge
+- ✅ Tag **after** all tests pass and sprint is verified
+- ✅ Use **consistent naming** (follow SemVer format)
+
+### Release Process
+
+#### Sprint Release Checklist
+
+Before tagging a release:
+
+- [ ] All sprint features implemented and tested
+- [ ] All tests pass (unit, integration, federation)
+- [ ] Documentation updated (README, sprint docs)
+- [ ] Code reviewed (if applicable)
+- [ ] Federation tested with Mastodon/test server
+- [ ] Sprint folder is complete and runnable
+- [ ] Version number updated in `pom.xml` (if applicable)
+- [ ] CHANGELOG.md updated (if maintained)
+
+#### Release Steps
+
+1. **Finalize sprint**:
+   ```bash
+   # Ensure all changes committed
+   git status
+   
+   # Run tests
+   ./mvnw test
+   ```
+
+2. **Merge to develop** (if not already done):
+   ```bash
+   git checkout develop
+   git merge --no-ff feature/sprint-X
+   ```
+
+3. **Merge to main and tag**:
+   ```bash
+   git checkout main
+   git pull origin main
+   git merge --no-ff develop
+   git tag -a v0.X.0-sprintX -m "Release Sprint X: [Description]"
+   git push origin main
+   git push origin --tags
+   ```
+
+4. **Create release notes** (optional, if using GitHub/GitLab releases):
+   - Summarize features
+   - List breaking changes (if any)
+   - Include testing instructions
+
+### Migration Between Sprints
+
 When building Sprint 2+:
-- **Option A**: Copy relevant code from `open-pace-p1/` to `open-pace-p2/`
-- **Option B**: Reference Sprint 1 in documentation, build Sprint 2 from scratch
-- **Recommended**: Copy and refine (shows progression, but keeps sprints independent)
+
+#### Option A: Copy and Refine (Recommended)
+- Copy relevant code from `open-pace-p1/` to `open-pace-p2/`
+- Refine and extend it
+- **Pros**: Shows progression, readers can see evolution
+- **Cons**: More code to maintain
+
+#### Option B: Reference Only
+- Build Sprint 2 from scratch
+- Reference Sprint 1 concepts in documentation
+- **Pros**: Cleaner, focused code
+- **Cons**: Less continuity, more duplication
+
+**Recommendation**: Use Option A for Sprints 1-3 (shows clear progression), Option B for Sprints 4-10 (more specialized features).
+
+#### Using Previous Sprint Code
+
+When copying code from a previous sprint:
+
+1. **Checkout the tagged version** to reference:
+   ```bash
+   git show v0.1.0-sprint1:open-pace-p1/src/main/java/... > reference.java
+   ```
+
+2. **Or browse the tag** in your IDE/editor:
+   ```bash
+   git checkout v0.1.0-sprint1
+   # Browse code, then return to your branch
+   git checkout feature/sprint-2
+   ```
+
+3. **Document the source** in code comments:
+   ```java
+   // Adapted from Sprint 1 (v0.1.0-sprint1)
+   // Enhanced with [new feature]
+   ```
+
+### Git Best Practices
+
+#### Commit Messages
+
+Follow **Conventional Commits** format:
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types**:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation
+- `refactor`: Code refactoring
+- `test`: Tests
+- `chore`: Maintenance
+
+**Examples**:
+```
+feat(sprint1): implement WebFinger discovery endpoint
+
+Adds /.well-known/webfinger endpoint for ActivityPub
+actor discovery. Supports resource parameter query.
+
+Closes #123
+```
+
+```
+fix(sprint2): correct JSON-LD context for RunActivity
+
+Fixes incorrect @context URL in RunActivity serialization.
+Now uses correct FediRun namespace.
+
+Fixes #456
+```
+
+#### Branch Hygiene
+
+- ✅ **Keep branches focused**: One sprint per feature branch
+- ✅ **Regular merges**: Merge to `develop` frequently
+- ✅ **Clean history**: Use `--no-ff` to preserve branch context
+- ✅ **Delete merged branches**: Clean up after merge to `main`
+  ```bash
+  git branch -d feature/sprint-X
+  git push origin --delete feature/sprint-X
+  ```
+
+#### Tag Management
+
+- ✅ **List tags**: `git tag -l "v0.*"`
+- ✅ **View tag details**: `git show v0.1.0-sprint1`
+- ✅ **Checkout tag**: `git checkout v0.1.0-sprint1` (creates detached HEAD)
+- ✅ **Delete tag** (if needed): `git tag -d v0.1.0-sprint1` (local), `git push origin :refs/tags/v0.1.0-sprint1` (remote)
+
+### Version History Tracking
+
+#### CHANGELOG.md (Optional)
+
+Maintain a `CHANGELOG.md` at repository root:
+
+```markdown
+# Changelog
+
+## [0.2.0-sprint2] - 2024-01-15
+
+### Added
+- Custom Activity types (RunActivity, CycleActivity)
+- JSON-LD context for sports activities
+- Schema validation
+
+### Changed
+- Enhanced Actor profile with sports metadata
+
+## [0.1.0-sprint1] - 2024-01-01
+
+### Added
+- Basic ActivityPub server
+- WebFinger discovery
+- Actor profiles
+- Inbox/Outbox endpoints
+```
+
+#### Version in Code
+
+Update version in `pom.xml` for each sprint:
+
+```xml
+<groupId>org.openpace</groupId>
+<artifactId>open-pace</artifactId>
+<version>0.2.0-sprint2</version>
+```
+
+### Summary
+
+**Key Workflow Points**:
+- ✅ Use **feature branches** for each sprint (`feature/sprint-X`)
+- ✅ Merge to **`develop`** for integration
+- ✅ Tag releases on **`main`** with semantic versions
+- ✅ Follow **Semantic Versioning** (MAJOR.MINOR.PATCH-sprintN)
+- ✅ Use **annotated tags** with descriptive messages
+- ✅ Maintain **clean commit history** with conventional commits
+- ✅ **Reference previous sprints** via git tags when copying code
 
 ## Documentation Template
 
@@ -355,14 +638,21 @@ For detailed versions and technology choices, see **[Quarkus Tech Stack](docs/QU
 4. **Plan code structure** (packages, classes, endpoints)
 
 ### Phase 2: Implementation
-1. **Create project folder**: `open-pace-pX/` (e.g., `open-pace-p1/`)
-2. **Set up Quarkus project** in that folder
-3. **Implement the part** following your outline
-4. **Write tests** as you go
-5. **Test with Mastodon** to verify federation works
+1. **Create feature branch**: `git checkout -b feature/sprint-X`
+2. **Create project folder**: `open-pace-pX/` (e.g., `open-pace-p1/`)
+3. **Set up Quarkus project** in that folder
+4. **Implement the part** following your outline
+5. **Write tests** as you go
+6. **Test with Mastodon** to verify federation works
+7. **Commit frequently** with clear, conventional commit messages
 
 **Starting Part 1 - Quick Setup**:
 ```bash
+# Create feature branch
+git checkout develop
+git pull origin develop
+git checkout -b feature/sprint-1
+
 # Create the project folder
 mkdir open-pace-p1
 cd open-pace-p1
@@ -403,7 +693,9 @@ cd open-pace-p1
 1. **Ensure project is complete** and runnable in its folder
 2. **Update main README** with status
 3. **Create README.md** in the part's folder with part-specific info
-4. **Prepare for next part** (create `open-pace-p(X+1)/` folder)
+4. **Merge to develop**: `git checkout develop && git merge --no-ff feature/sprint-X`
+5. **Tag release**: Merge to `main` and tag with `v0.X.0-sprintX`
+6. **Prepare for next part** (create feature branch for next sprint)
 
 ### Key Success Factors
 
@@ -502,14 +794,17 @@ Before marking a part complete:
 
 ## Next Steps
 
-1. **Create `open-pace-p1/` folder** and set up Quarkus project
-2. **Create Part 1** (establish pattern)
-3. **Document decisions** in relevant strategy documents
-4. **Review Part 1** (refine approach)
-5. **Create `open-pace-p2/` folder** and apply pattern
-6. **Continue for Parts 3-7**
-7. **Cross-part review** (consistency check)
-8. **Final polish** (examples, screenshots, etc.)
+1. **Initialize repository** (if not done): Set up `main` and `develop` branches
+2. **Create feature branch**: `git checkout -b feature/sprint-1`
+3. **Create `open-pace-p1/` folder** and set up Quarkus project
+4. **Create Part 1** (establish pattern)
+5. **Document decisions** in relevant strategy documents
+6. **Review Part 1** (refine approach)
+7. **Tag release**: Merge to `main` and tag `v0.1.0-sprint1`
+8. **Create `open-pace-p2/` folder** and apply pattern
+9. **Continue for Parts 3-10** with proper versioning
+10. **Cross-part review** (consistency check)
+11. **Final polish** (examples, screenshots, etc.)
 
 ## Migration Between Parts
 
