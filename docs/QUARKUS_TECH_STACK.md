@@ -1,6 +1,116 @@
 # Quarkus Technology Stack & Versions
 
-This document details the Quarkus technologies and versions used in the Open Pace tutorial series, based on `open-pace-p1/pom.xml`.
+This document details the Quarkus technologies and versions used in the Open Pace project. This is the **definitive reference** for all technology choices and dependencies.
+
+> **📌 Important**: This document outlines the core technology decisions for Open Pace. Please review this document before suggesting alternative technologies or frameworks.
+
+## Why Quarkus?
+
+**Quarkus is the chosen framework for Open Pace** - this is a deliberate, well-considered decision that aligns with the project's goals and requirements.
+
+### Technical Reasons
+
+1. **Excellent ActivityPub Support**
+   - Native REST support with JSON-LD serialization
+   - Strong Jackson integration for complex JSON structures
+   - Reactive programming model fits ActivityPub's webhook-style architecture
+
+2. **Vert.x Integration**
+   - First-class Vert.x support for async, non-blocking operations
+   - Critical for GPX processing, map generation, and federation delivery
+   - Event-driven architecture matches ActivityPub's distributed nature
+
+3. **Developer Experience**
+   - Hot reload for rapid development
+   - Dev Services for automatic database setup
+   - Clear, opinionated structure
+   - Excellent documentation and community
+
+4. **Performance**
+   - Fast startup times
+   - Low memory footprint
+   - Native compilation support (GraalVM)
+   - Optimized for cloud-native deployments
+
+5. **Ecosystem**
+   - Rich extension ecosystem
+   - Well-maintained and actively developed
+   - Strong integration with PostgreSQL, Redis, and other infrastructure
+   - Battle-tested in production environments
+
+### Project Alignment
+
+Quarkus aligns perfectly with Open Pace's goals:
+- **Federation-first**: Reactive model handles ActivityPub's distributed nature
+- **Performance-critical**: Async processing for GPX files, maps, and federation
+- **Developer-friendly**: Clear structure for tutorial/learning purposes
+- **Production-ready**: Mature framework suitable for real-world deployment
+
+## Technology Decision Philosophy
+
+### Core Technology Choices
+
+**The core technology stack is established and not open for discussion:**
+
+- ✅ **Quarkus** - The framework (not Spring Boot, Micronaut, or others)
+- ✅ **Java 21** - The language (not Kotlin, Scala, or others)
+- ✅ **PostgreSQL** - The database (not MySQL, MongoDB, or others)
+- ✅ **Vert.x** - The async framework (integrated with Quarkus)
+
+These decisions have been made based on project requirements, maintainer preferences, and technical alignment. **We appreciate your understanding that these core choices are final.**
+
+### Dependency Philosophy
+
+**This project focuses on existing Quarkus extensions** and maintains a lean dependency footprint:
+
+#### Preferred Dependencies
+
+1. **Quarkus Extensions** (first choice)
+   - Use official Quarkus extensions when available
+   - Managed through Quarkus BOM for version compatibility
+   - Well-integrated with the framework
+
+2. **Minimal External Dependencies**
+   - Only add dependencies when absolutely necessary
+   - Prefer Quarkus-native solutions over external libraries
+   - Each dependency must justify its inclusion
+
+3. **Scrutiny Process**
+
+   **Before adding any new dependency**, consider:
+   - ✅ Is there a Quarkus extension that provides this functionality?
+   - ✅ Is this dependency truly necessary, or can we implement it ourselves?
+   - ✅ Does it align with the project's architecture and goals?
+   - ✅ What is the maintenance burden and long-term viability?
+   - ✅ Does it introduce unnecessary complexity?
+
+   **Unnecessary dependencies will be looked at very carefully before inclusion.** We prefer:
+   - Building functionality ourselves when it's straightforward
+   - Using Quarkus extensions over standalone libraries
+   - Keeping the dependency tree lean and maintainable
+
+#### Examples of Careful Consideration
+
+- **GPX Parsing**: External library (`jpx`) is necessary - no Quarkus extension exists
+- **Geometry Types**: External library (`jts-core`) is necessary - standard for PostGIS
+- **Authentication**: Use `quarkus-security-jpa` (Quarkus extension) rather than standalone libraries
+- **Caching**: Use `quarkus-redis-cache` (Quarkus extension) rather than standalone Redis clients
+
+### Contributing Technology Suggestions
+
+We welcome contributions that:
+- ✅ Use existing Quarkus extensions
+- ✅ Extend current functionality within the established stack
+- ✅ Improve performance or developer experience
+- ✅ Add features that align with the project goals
+
+We appreciate suggestions, but please understand that:
+- Core technology choices (Quarkus, Java, PostgreSQL) are not open for discussion
+- Alternative frameworks or languages will not be considered
+- Dependency additions require strong justification
+- The maintainer makes final decisions on all technology choices
+
+**Thank you for respecting these decisions** - they allow us to focus on building great ActivityPub functionality rather than debating technology choices.
 
 ## Platform Version
 
@@ -137,6 +247,8 @@ All Quarkus extensions are managed through the Quarkus BOM (Bill of Materials), 
 - Excellent ActivityPub support (REST, JSON, async)
 - Strong Vert.x integration
 - Great developer experience
+
+> **Note**: See the [Why Quarkus?](#why-quarkus) section above for a comprehensive explanation of why Quarkus was chosen as the framework for this project.
 
 ### Why REST with Jackson?
 - ActivityPub requires JSON-LD serialization

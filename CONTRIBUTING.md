@@ -90,6 +90,7 @@ You don't need to explicitly document which thinking model you used, but contrib
 1. **Read the documentation**:
    - [Implementation Strategy](IMPLEMENTATION_STRATEGY.md) - Overall approach and principles
    - [Consistency Checklist](CONSISTENCY_CHECKLIST.md) - Quality standards
+   - **[Quarkus Tech Stack](docs/QUARKUS_TECH_STACK.md)** - **Technology choices and dependency philosophy** ⚠️ **Important: Read this before suggesting technology changes**
    - Relevant strategy documents in `docs/` folder
 
 2. **Check existing issues**: Look for open issues or discussions that might relate to your contribution
@@ -306,6 +307,16 @@ Contributions are evaluated based on:
 - Follow API design patterns from [API Design](docs/API_DESIGN.md)
 - Follow error handling patterns from [Error Handling Strategy](docs/ERROR_HANDLING_STRATEGY.md)
 - Document new patterns in relevant strategy documents
+
+### Technology Stack
+
+**Important**: This project uses **Quarkus** as its core framework. Before suggesting alternative technologies or frameworks, please read the [Quarkus Tech Stack](docs/QUARKUS_TECH_STACK.md) document, which explains:
+
+- Why Quarkus was chosen
+- The dependency philosophy (focus on Quarkus extensions)
+- That core technology choices (Quarkus, Java, PostgreSQL) are established and final
+
+We appreciate contributions that work within the established technology stack. Suggestions for alternative frameworks or languages will not be considered, as these decisions allow us to focus on building great ActivityPub functionality.
 
 ### Apache 2 License Headers
 

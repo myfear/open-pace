@@ -208,6 +208,9 @@ git checkout develop
 - **[Implementation Strategy](IMPLEMENTATION_STRATEGY.md)**: Overall approach, principles, structure, and workflow for implementation sprints
 - **[Consistency Checklist](CONSISTENCY_CHECKLIST.md)**: Quality standards for each sprint
 
+### Technology & Architecture
+- **[Quarkus Tech Stack](docs/QUARKUS_TECH_STACK.md)**: ⚠️ **Technology choices, dependency philosophy, and why Quarkus** - **Read this before suggesting technology changes**
+
 ### Implementation Guides
 - **[Database Design](docs/DATABASE_DESIGN.md)**: Schema design, indexing, and query patterns
 - **[API Design](docs/API_DESIGN.md)**: ActivityPub vs Application endpoint organization, OpenAPI documentation
@@ -217,7 +220,6 @@ git checkout develop
 - **[Rate Limiting Strategy](docs/RATE_LIMITING_STRATEGY.md)**: Abuse prevention and resource protection
 - **[Background Job Processing Strategy](docs/BACKGROUND_JOBS_STRATEGY.md)**: Asynchronous job processing with Redis queues
 - **[HTTP Signatures Strategy](docs/HTTP_SIGNATURES_STRATEGY.md)**: S2S authentication for ActivityPub federation
-- **[Quarkus Tech Stack](docs/QUARKUS_TECH_STACK.md)**: Technologies and versions used
 - **[Architectural Gaps](docs/ARCHITECTURAL_GAPS.md)**: Analysis of missing architectural elements
 
 ### ActivityPub & Features
